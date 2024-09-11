@@ -14,8 +14,8 @@ return {
       -- icon_hl_group: optional hl_group for the icon
       -- title: set to anything or empty string to hide
       cmdline = { pattern = "^:", icon = "", lang = "vim" },
-      search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex" },
-      search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" },
+      search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex", view = "cmdline" },
+      search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex", view = "cmdline" },
       filter = { pattern = "^:%s*!", icon = "$", lang = "bash" },
       lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" },
       help = { pattern = "^:%s*he?l?p?%s+", icon = "" },
@@ -198,6 +198,7 @@ return {
   status = {}, --- @see section on statusline components
   ---@type NoiceFormatOptions
   format = {}, --- @see section on formatting 
+  background_colour = "#0364b8",
   },
   dependencies = {
     "MunifTanjim/nui.nvim",
