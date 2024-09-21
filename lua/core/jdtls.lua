@@ -3,7 +3,7 @@ local function get_jdtls()
   local jdtls = mason_registry.get_package("jdtls")
   local jdtls_path = jdtls:get_install_path()
   local launcher = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
-  local SYSTEM = "linux"
+  local SYSTEM = "win"
   local config = jdtls_path .. "/config_" .. SYSTEM
   local lombok = jdtls_path .. "/lombok.jar"
   return launcher, config, lombok
@@ -26,7 +26,7 @@ local function get_bundles()
 end
 
 local function get_workspace()
-  local home = os.getenv "HOME"
+  local home = os.getenv "USERPROFILE"
   local workspace_path = home .. "/workspace"
   local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 

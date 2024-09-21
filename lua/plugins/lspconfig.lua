@@ -9,7 +9,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "ts_ls", "jdtls"},
+        ensure_installed = { "lua_ls", "ts_ls", "jdtls", "pyright"},
       })
     end,
   },
@@ -31,6 +31,24 @@ return {
       local lspconfig = require("lspconfig")
       lspconfig.lua_ls.setup({})
       lspconfig.ts_ls.setup({})
+      lspconfig.pyright.setup({
+        settings = {
+          pyright = {
+            disableLanguageServices = false,
+            disableOrganizeImports = false,
+            autoImportCompletion = "on",
+          },
+          python = {
+            analysis = {
+              autoSearchPaths = true,
+              diagnosticMode = "workspace",
+              useLibraryCodeForTypes = true,
+              typeCheckingMode = "off",
+            },
+          },
+        },
+        filetypes = { "python" },
+      })
       vim.keymap.set("n", "<leader>ch", vim.lsp.buf.hover, { desc = "[C]ode [H]over Documentation" })
       vim.keymap.set("n", "<leader>cd", vim.lsp.buf.definition, { desc = "[C]ode [D]efinition" })
       vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "[C]ode [A]ctions" })
