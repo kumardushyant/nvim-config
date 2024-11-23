@@ -217,7 +217,7 @@ local function setup_jdtls()
     require("jdtls.setup").add_commands()
     vim.lsp.codelens.refresh()
     vim.api.nvim_create_autocmd("BufWritePost", {
-      pattern = { "*.java" },
+      pattern = { "*.java", "*.kt" },
       callback = function()
         local _, _ = pcall(vim.lsp.codelens.refresh)
       end
