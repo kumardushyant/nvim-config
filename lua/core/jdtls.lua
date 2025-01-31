@@ -60,7 +60,6 @@ end
 
 local function setup_jdtls()
   local jdtls = require("jdtls")
-  
   local launcher, config, lombok = get_jdtls()
   local workspace_dir = get_workspace()
 
