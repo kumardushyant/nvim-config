@@ -5,10 +5,30 @@ return {
   ---@type snacks.Config
   opts = {
     bigfile = { enabled = true },
+    statuscolumn = {
+      enabled = true,
+      right = { "fold", "git" },
+      left = { "mark", "sign" },
+      folds = {
+        open = false,
+	git_hl = false,
+      },
+      git = {
+        patterns = { "GitSign", "MiniDiffSign" },
+      },
+      refresh = 50,
+    },
     dashboard = { 
       enabled = true,
       sections = {
         { section = "header" },
+	{
+          pane = 2,
+          section = "terminal",
+          cmd = "colorscript -e panes",
+          height = 5,
+          padding = 1,
+        },
 	{ section = "keys", gap = 1, padding = 1 },
 	{ pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
 	{ pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
@@ -48,16 +68,59 @@ return {
     },
     quickfile = { enabled = true },
     scroll = { enabled = true },
-    statuscolumn = { enabled = true },
     words = { enabled = true },
     animate = {
       duration = 20,
       fps = 60,
       easing = "linear",
     },
+    gitbrowse = {
+      notify = true,
+      -- Handler to open the url in a browser
+      ---@param url string
+      open = function(url)
+        if vim.fn.has("nvim-0.10") == 0 then
+          require("lazy.util").open(url, { system = true })
+          return
+        end
+        vim.ui.open(url)
+      end,
+      ---@type "repo" | "branch" | "file" | "commit"
+      what = "file", -- what to open. not all remotes support all types
+      branch = nil, ---@type string?
+      line_start = nil, ---@type number?
+      line_end = nil, ---@type number?
+      -- patterns to transform remotes to an actual URL
+      remote_patterns = {
+        { "^(https?://.*)%.git$"              , "%1" },
+        { "^git@(.+):(.+)%.git$"              , "https://%1/%2" },
+        { "^git@(.+):(.+)$"                   , "https://%1/%2" },
+        { "^git@(.+)/(.+)$"                   , "https://%1/%2" },
+        { "^ssh://git@(.*)$"                  , "https://%1" },
+        { "^ssh://([^:/]+)(:%d+)/(.*)$"       , "https://%1/%3" },
+        { "^ssh://([^/]+)/(.*)$"              , "https://%1/%2" },
+        { "ssh%.dev%.azure%.com/v3/(.*)/(.*)$", "dev.azure.com/%1/_git/%2" },
+        { "^https://%w*@(.*)"                 , "https://%1" },
+        { "^git@(.*)"                         , "https://%1" },
+        { ":%d+"                              , "" },
+        { "%.git$"                            , "" },
+      },
+      url_patterns = {
+        ["github%.com"] = {
+          branch = "/tree/{branch}",
+	  file = "/blob/{branch}/{file}#L{line_start}-L{line_end}",
+	  commit = "/commit/{commit}",
+        },
+	["innersource%.com"] = {
+	  branch = "/-/tree/{branch}",
+          file = "/-/blob/{branch}/{file}#L{line_start}-L{line_end}",
+          commit = "/-/commit/{commit}",
+        },
+      },
+    },
     styles = {
       notification = {
-        -- wo = { wrap = true } -- Wrap notifications
+        wo = { wrap = true } -- Wrap notifications
       }
     }
   },
