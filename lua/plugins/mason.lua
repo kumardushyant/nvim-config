@@ -7,9 +7,20 @@ return {
   },
   {
     "williamboman/mason-lspconfig.nvim",
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "williamboman/mason.nvim",
+    },
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = { "lua_ls", "ts_ls", "jdtls", "pyright"},
+      })
+
+      require("mason-lspconfig").setup_handlers({
+        -- Default handler for any installed LSP
+        function (server)
+          require("lspconfig")[server].setup({})
+        end,
       })
     end,
   },
